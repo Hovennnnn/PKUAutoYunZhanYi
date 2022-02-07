@@ -183,7 +183,8 @@ def submit(driver):
     ).click()
     time.sleep()
 
-def fill(driver, province, city, country, address, detail, track):
+
+def fill(driver, province, city, country, address):
     print('开始云战役填报')
 
     print('选择到校情况', end='')
@@ -273,8 +274,6 @@ def run(
     city,
     country,
     address,
-    detail,
-    track,
     sendkey,
     wechat_remind=True
 ):
@@ -283,7 +282,7 @@ def run(
         print('=================================')
 
         go_to_YunZhanYi(driver)
-        fill(driver, province, city, country, address, detail, track)
+        fill(driver, province, city, country, address)
         print('=================================')
 
         print('=================================')
@@ -305,6 +304,7 @@ if __name__ == '__main__':
     parser.add_argument('--PROVINCE', type=str)
     parser.add_argument('--CITY', type=str)
     parser.add_argument('--COUNTRY', type=str)
+    parser.add_argument('--ADDRESS', type=str)
     parser.add_argument('--SENDKEY', type=str)
     argconf = parser.parse_args()
 
@@ -319,7 +319,7 @@ if __name__ == '__main__':
 
     run(
         driver_pjs, argconf.ID, argconf.PASSWORD, argconf.PROVINCE,
-        argconf.CITY, argconf.COUNTRY, argconf.SENDKEY
+        argconf.CITY, argconf.COUNTRY, argconf.ADDRESS, argconf.SENDKEY
     )
 
     driver_pjs.quit()

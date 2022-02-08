@@ -26,5 +26,5 @@ jobs:
         
       - name: 'Working'
         run:
-          python main.py --ID ${{secrets.ID}} --PASSWORD ${{secrets.PASSWORD}} --PROVINCE ${{secrets.PROVINCE}} --CITY ${{secrets.CITY}} --COUNTRY ${{secrets.COUNTRY}} --ADDRESS ${{secrets.ADDRESS}}--SENDKEY ${{secrets.SENDKEY}}
+          python main.py --ID ${{secrets.ID}} --PASSWORD ${{secrets.PASSWORD}} --PROVINCE ${{secrets.PROVINCE}} --CITY ${{secrets.CITY}} --COUNTRY ${{secrets.COUNTRY}} --ADDRESS ${{secrets.ADDRESS}} --SENDKEY ${{secrets.SENDKEY}}
           

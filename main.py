@@ -1,4 +1,5 @@
 # -*- coding: utf-8
+from msilib import type_binary
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
@@ -279,17 +280,7 @@ def wechat_notification(userName, sckey):
         response = json.loads(response.read().decode('utf-8'))
 
 
-def run(
-    driver,
-    userName,
-    password,
-    province,
-    city,
-    country,
-    address,
-    sendkey,
-    wechat_remind=True
-):
+def run(driver, userName, password, province, city, country, address, sendkey):
     try:
         login(driver, userName, password)
         print('=================================')
@@ -303,8 +294,12 @@ def run(
         exception_printer(driver, e)
         return
 
-    if wechat_remind:
-        wechat_notification(userName, sendkey)
+    if sendkey:
+        try:
+            wechat_notification(userName, sendkey)
+        except Exception as e:
+            print(e)
+            print('微信推送失败！请检查密钥SENDKEY是否过期！')
 
     print('报备成功！\n')
 
@@ -325,7 +320,7 @@ if __name__ == '__main__':
     chrome_options.add_argument("--headless")
     driver_pjs = webdriver.Edge(
         options=chrome_options,
-        # executable_path = r'C:\Program Files\Google\Chrome\Application\chromedriver',
+                                                                          # executable_path = r'C:\Program Files\Google\Chrome\Application\chromedriver',
         executable_path='/usr/bin/chromedriver',
         service_args=['--ignore-ssl-errors=true', '--ssl-protocol=TLSv1']
     )

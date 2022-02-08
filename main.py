@@ -1,5 +1,4 @@
 # -*- coding: utf-8
-from msilib import type_binary
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait

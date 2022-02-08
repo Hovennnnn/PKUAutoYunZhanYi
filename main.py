@@ -81,28 +81,33 @@ def go_to_YunZhanYi(driver):
     driver.switch_to.window(driver.window_handles[-1])
     WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(
-            (By.CLASS_NAME, 'el-tabs__nav is-top is-stretch')
+            (By.CLASS_NAME, 'el-tabs__nav-scroll')
         )
     )
 
 
 def select_in_or_out(driver):
-    driver.find_element_by_class_name('el-select').click()
-    WebDriverWait(driver, 10).until(
+    # 点击“每日填报”
+    driver.find_element_by_xpath('//*[@id="tab-daily_info_tab"]/span').click()
+    WebDriverWait(driver, 20).until(
         EC.visibility_of_element_located(
             (
                 By.XPATH,
-                f'//*[@id="pane-daily_info_tab"]/form/div[4]/div/div[2]/label'
+                f'//*[@id="pane-daily_info_tab"]/form/div[4]/div/div[2]/label/span[2]'
             )
         )
     )
+
+    # 点击“未到校”
     driver.find_element_by_xpath(
-        f'//*[@id="pane-daily_info_tab"]/form/div[4]/div/div[2]/label"]'
+        f'//*[@id="pane-daily_info_tab"]/form/div[4]/div/div[2]/label/span[2]'
     ).click()
 
 
 def select_province(driver, province):
-    driver.find_elements_by_class_name('el-input__inner')[4].click()
+    driver.find_element_by_xpath(
+        '//*[@id="pane-daily_info_tab"]/form/div[5]/div/div/div[1]/input'
+    ).click()
     dropdown_handler(
         driver,
         f'/html/body/div[2]/div[1]/div[1]/ul/li/span[text()="{province}"]'
@@ -110,14 +115,18 @@ def select_province(driver, province):
 
 
 def select_city(driver, city):
-    driver.find_elements_by_class_name('el-input__inner')[5].click()
+    driver.find_element_by_xpath(
+        '//*[@id="pane-daily_info_tab"]/form/div[6]/div/div/div[1]/input'
+    ).click()
     dropdown_handler(
         driver, f'/html/body/div[3]/div[1]/div[1]/ul/li/span[text()="{city}"]'
     )
 
 
 def select_country(driver, country):
-    driver.find_elements_by_class_name('el-input__inner')[6].click()
+    driver.find_element_by_xpath(
+        '//*[@id="pane-daily_info_tab"]/form/div[7]/div/div/div[1]/input'
+    ).click()
     dropdown_handler(
         driver,
         f'/html/body/div[4]/div[1]/div[1]/ul/li/span[text()="{country}"]'
@@ -125,9 +134,12 @@ def select_country(driver, country):
 
 
 def write_address(driver, address):
-    driver.find_elements_by_class_name('el-textarea__inner')[1].clear()
-    driver.find_elements_by_class_name('el-textarea__inner'
-                                       )[1].send_keys(f'{address}')
+    driver.find_element_by_xpath(
+        '//*[@id="pane-daily_info_tab"]/form/div[8]/div/div/textarea'
+    ).clear()
+    driver.find_element_by_xpath(
+        '//*[@id="pane-daily_info_tab"]/form/div[8]/div/div/textarea'
+    ).send_keys(f'{address}')
     time.sleep(0.1)
 
 
@@ -150,7 +162,7 @@ def select_healthy(driver):
     # 是否存在以下症状 （发热、咳嗽、腹泻)
     driver.find_element_by_xpath(
         f'//*[@id="pane-daily_info_tab"]/form/div[13]/div/label[2]/span[text()="否"]'
-    )
+    ).click()
 
     # 疫情诊断
     driver.find_element_by_xpath(
@@ -181,14 +193,14 @@ def submit(driver):
     driver.find_element_by_xpath(
         '//*[@id="pane-daily_info_tab"]/form/div[17]/div/button/span'
     ).click()
-    time.sleep()
+    time.sleep(1)
 
 
 def fill(driver, province, city, country, address):
     print('开始云战役填报')
 
     print('选择到校情况', end='')
-    select_in_or_out(driver, '未到校')
+    select_in_or_out(driver)
     print('Done')
 
     print('选择省份    ', end='')
@@ -220,6 +232,7 @@ def fill(driver, province, city, country, address):
 
     print('其它情况说明')
     print('非必要，跳过')
+    submit(driver)
     print('Done')
 
 
@@ -312,6 +325,7 @@ if __name__ == '__main__':
     chrome_options.add_argument("--headless")
     driver_pjs = webdriver.Edge(
         options=chrome_options,
+        # executable_path = r'C:\Program Files\Google\Chrome\Application\chromedriver',
         executable_path='/usr/bin/chromedriver',
         service_args=['--ignore-ssl-errors=true', '--ssl-protocol=TLSv1']
     )
